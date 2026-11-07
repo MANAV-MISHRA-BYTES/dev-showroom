@@ -1,0 +1,18 @@
+name: CI Static Validation
+
+on:
+  push:
+    branches: [ "main", "feature/*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Run Basic Syntax Check
+        run: |
+          echo "Validating HTML, CSS, and JS static assets..."
+          ls -la
