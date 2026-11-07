@@ -64,3 +64,29 @@ window.addEventListener('scroll', () => {
 backToTopBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.getElementById('projectsGrid');
+  if (grid) {
+    fetch('projects.json')
+      .then(res => res.json())
+      .then(projects => {
+        grid.innerHTML = projects.map(p => `
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-type">${p.type}</span>
+              <h3>${p.title}</h3>
+            </div>
+            <p class="project-desc">${p.description}</p>
+            <div class="tech-tags">
+              ${p.tags.map(t => `<span>${t}</span>`).join('')}
+            </div>
+            <div class="project-links">
+              <a href="${p.demoUrl}" class="btn-link demo">Live Demo</a>
+              <a href="${p.codeUrl}" class="btn-link code">GitHub</a>
+            </div>
+          </div>
+        `).join('');
+      }).catch(err => console.error('Error loading projects:', err));
+  }
+});
