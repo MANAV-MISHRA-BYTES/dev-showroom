@@ -1,0 +1,26 @@
+[
+  {
+    "type": "Full-Stack Web App",
+    "title": "Hospital Management System V2",
+    "description": "Modular healthcare platform with JWT authentication, Celery async tasks, and Redis caching.",
+    "tags": ["Flask", "Vue 3", "Redis", "Celery"],
+    "demoUrl": "#",
+    "codeUrl": "#"
+  },
+  {
+    "type": "AI / Machine Learning",
+    "title": "CogniFact AI",
+    "description": "Fake news detection web application built with Python and Hugging Face transformer models.",
+    "tags": ["Python", "HuggingFace", "Streamlit"],
+    "demoUrl": "#",
+    "codeUrl": "#"
+  },
+  {
+    "type": "Hackathon Submission",
+    "title": "VyaaparDrishti AI",
+    "description": "Interactive business insight platform powered by Gemini API, Vue 3, and Render deployments.",
+    "tags": ["Gemini API", "Vue 3", "Flask"],
+    "demoUrl": "#",
+    "codeUrl": "#"
+  }
+]
