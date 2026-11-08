@@ -90,3 +90,75 @@ document.addEventListener('DOMContentLoaded', () => {
       }).catch(err => console.error('Error loading projects:', err));
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const terminalInput = document.getElementById('terminalInput');
+  const terminalBody = document.getElementById('terminalBody');
+  const terminalOutput = terminalBody.querySelector('.terminal-output');
+
+  if (terminalInput) {
+    terminalInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const command = terminalInput.value.trim().toLowerCase();
+        
+        const commandLine = document.createElement('p');
+        commandLine.innerHTML = `<span class="prompt">guest@dev-showroom:~$</span> ${escapeHtml(terminalInput.value)}`
+        terminalOutput.appendChild(commandLine);
+
+        processCommand(command, terminalOutput);
+
+        terminalInput.value = '';
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+      }
+    });
+
+    terminalBody.addEventListener('click', () => {
+      terminalInput.focus();
+    });
+  }
+});
+
+function processCommand(cmd, outputContainer) {
+  const responseLine = document.createElement('p');
+  
+  switch (cmd) {
+    case 'help':
+      responseLine.innerHTML = `Available commands:<br>
+        &nbsp;&nbsp;<b>about</b> &nbsp;&nbsp;&nbsp;- Learn about my background & stack<br>
+        &nbsp;&nbsp;<b>skills</b> &nbsp;&nbsp;&nbsp;- View technical skills matrix<br>
+        &nbsp;&nbsp;<b>projects</b> &nbsp;- List active repositories & builds<br>
+        &nbsp;&nbsp;<b>clear</b> &nbsp;&nbsp;&nbsp;- Clear terminal screen<br>
+        &nbsp;&nbsp;<b>contact</b> &nbsp;- Get GitHub & professional links`;
+      break;
+    case 'about':
+      responseLine.innerHTML = `Full-stack developer & data science undergraduate based in India. Focused on Python, Vue.js, Flask, and building scalable web systems.`;
+      break;
+    case 'skills':
+      responseLine.innerHTML = `Languages & Frameworks: Python, C++, Java, JavaScript, Vue.js, React, Flask, SQL<br>Tools & Data: Docker, Redis, Celery, NumPy, Pandas, Scikit-Learn`;
+      break;
+    case 'projects':
+      responseLine.innerHTML = `1. Hospital Management System V2 (Flask, Vue 3, Redis)<br>2. CogniFact AI (Python, HuggingFace)<br>3. VyaaparDrishti AI (Gemini API, Flask)`;
+      break;
+    case 'contact':
+      responseLine.innerHTML = `GitHub: <a href="https://github.com/MANAV-MISHRA-BYTES" target="_blank" style="color: var(--accent-cyan)">MANAV-MISHRA-BYTES</a>`;
+      break;
+    case 'clear':
+      outputContainer.innerHTML = '';
+      return;
+    case '':
+      return;
+    default:
+      responseLine.innerHTML = `Command not recognized: '${escapeHtml(cmd)}'. Type 'help' for available commands.`;
+      responseLine.style.color = '#ef4444';
+  }
+  
+  outputContainer.appendChild(responseLine);
+}
+
+function escaparHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+// Fix typo helper
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
