@@ -615,3 +615,56 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+/* ==========================================
+   9. PROJECT FILTER & SEARCH CONTROLS
+   ========================================== */
+.project-controls {
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+#projectSearch {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#projectSearch:focus {
+  border-color: var(--accent-cyan);
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filter-btn {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  background-color: var(--accent-cyan);
+  color: var(--bg-main);
+  border-color: var(--accent-cyan);
+  font-weight: bold;
+}
