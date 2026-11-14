@@ -208,3 +208,36 @@ function filterProjects(searchTerm, category) {
     }
   });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const copyBtn = document.getElementById('copyEmailBtn');
+  const emailText = document.getElementById('emailText');
+  const contactForm = document.getElementById('contactForm');
+
+  if (copyBtn && emailText) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(emailText.innerText).then(() => {
+        showToast('Email copied to clipboard!');
+      });
+    });
+  }
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('senderName').value.trim();
+      showToast(`Thanks ${name}! Message logged.`);
+      contactForm.reset();
+    });
+  }
+});
+
+function showToast(message) {
+  const toast = document.getElementById('toastNotification');
+  if (!toast) return;
+  toast.innerText = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
