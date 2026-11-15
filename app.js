@@ -241,3 +241,21 @@ function showToast(message) {
     toast.classList.remove('show');
   }, 3000);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const skillFills = document.querySelectorAll('.progress-fill');
+
+  if (skillFills.length > 0) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const targetWidth = entry.target.getAttribute('data-width');
+          entry.target.style.width = targetWidth;
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    skillFills.forEach(bar => observer.observe(bar));
+  }
+});
