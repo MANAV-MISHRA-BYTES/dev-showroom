@@ -20,6 +20,8 @@
             <span class="status-text">Building in Public</span>
         </div>
         <ul class="nav-links">
+            <button id="themeToggleBtn" class="btn-secondary" title="Toggle Theme (Alt+T)">🌓 Theme</button>
+            <button id="shortcutsHelpBtn" class="btn-secondary" title="Keyboard Shortcuts (?)">⌨️ ?</button>
             <li><a href="#hero">Home</a></li>
             <li><a href="#certificates">Certificates</a></li>
             <li><a href="#projects">Projects</a></li>
@@ -358,6 +360,23 @@
 
     <!-- Toast Notification -->
     <div id="toastNotification" class="toast">Action completed!</div>
+
+    <!-- Keyboard Shortcuts Cheat-Sheet Modal -->
+    <div id="shortcutsModal" class="modal-overlay hidden">
+        <div class="modal-card shortcuts-card">
+            <div class="modal-header">
+                <h3>Keyboard <span class="highlight">Shortcuts</span></h3>
+                <button id="closeShortcutsBtn" class="close-btn">&times;</button>
+            </div>
+            <ul class="shortcuts-list">
+                <li><span>Focus Project Search</span> <kbd>/</kbd></li>
+                <li><span>Focus CLI Terminal</span> <kbd>`</kbd></li>
+                <li><span>Toggle Color Theme</span> <kbd>Alt + T</kbd></li>
+                <li><span>Open / Close Shortcuts</span> <kbd>?</kbd></li>
+                <li><span>Close Active Modal</span> <kbd>Esc</kbd></li>
+            </ul>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <p>&copy; 2026 Manav Mishra. Built with vanilla HTML, CSS & JS.</p>

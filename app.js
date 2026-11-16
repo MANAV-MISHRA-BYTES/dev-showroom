@@ -259,3 +259,72 @@ document.addEventListener('DOMContentLoaded', () => {
     skillFills.forEach(bar => observer.observe(bar));
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const themeBtn = document.getElementById('themeToggleBtn');
+  const shortcutsBtn = document.getElementById('shortcutsHelpBtn');
+  const shortcutsModal = document.getElementById('shortcutsModal');
+  const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
+
+  // Restore saved theme
+  if (localStorage.getItem('devShowroomTheme') === 'light') {
+    document.body.classList.add('light-theme');
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    const mode = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+    localStorage.setItem('devShowroomTheme', mode);
+    if (typeof showToast === 'function') {
+      showToast(`Switched to ${mode} mode`);
+    }
+  }
+
+  if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+
+  if (shortcutsBtn && shortcutsModal) {
+    shortcutsBtn.addEventListener('click', () => shortcutsModal.classList.remove('hidden'));
+  }
+
+  if (closeShortcutsBtn && shortcutsModal) {
+    closeShortcutsBtn.addEventListener('click', () => shortcutsModal.classList.add('hidden'));
+  }
+
+  // Global keyboard shortcuts (ignore when typing in inputs)
+  document.addEventListener('keydown', (e) => {
+    const tag = document.activeElement.tagName.toLowerCase();
+    const isTyping = tag === 'input' || tag === 'textarea';
+
+    if (e.altKey && e.key.toLowerCase() === 't') {
+      e.preventDefault();
+      toggleTheme();
+      return;
+    }
+
+    if (e.key === 'Escape' && shortcutsModal) {
+      shortcutsModal.classList.add('hidden');
+      return;
+    }
+
+    if (isTyping) return;
+
+    if (e.key === '?') {
+      e.preventDefault();
+      if (shortcutsModal) shortcutsModal.classList.toggle('hidden');
+    } else if (e.key === '/') {
+      e.preventDefault();
+      const search = document.getElementById('projectSearch');
+      if (search) {
+        search.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        search.focus();
+      }
+    } else if (e.key === '`') {
+      e.preventDefault();
+      const term = document.getElementById('terminalInput');
+      if (term) {
+        term.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        term.focus();
+      }
+    }
+  });
+});
