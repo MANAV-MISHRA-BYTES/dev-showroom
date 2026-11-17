@@ -328,3 +328,89 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// ==========================================
+// PROJECT ARCHITECTURE CASE STUDY MODAL
+// ==========================================
+const projectCaseStudies = {
+  'vyaapardrishti': {
+    title: 'VyaaparDrishti AI',
+    badge: 'Business Analytics & Async Pipeline',
+    summary: 'An AI-driven business intelligence platform built to process sales records, generate forecasts, and surface actionable financial metrics.',
+    architecture: [
+      'Backend: Python Flask REST API with modular service blueprints',
+      'Async Workers: Celery + Redis task queue for heavy data processing',
+      'Database: PyMongo / MongoDB document store for flexible ledger schemas',
+      'Deployment: Containerized production deployment on Render'
+    ],
+    repo: 'https://github.com/MANAV-MISHRA-BYTES',
+    live: '#projects'
+  },
+  'nexus': {
+    title: 'Nexus Conference ROI Optimizer',
+    badge: 'Full-Stack AI Web App',
+    summary: 'Built for the Google Antigravity Challenge to help attendees optimize conference schedules, networking targets, and event ROI.',
+    architecture: [
+      'Frontend: Reactive Vue 3 single-page interface with glassmorphic UI',
+      'Backend: Lightweight Flask API gateway handling prompt orchestration',
+      'AI Engine: Google Gemini API for structured schedule & speaker analysis'
+    ],
+    repo: 'https://github.com/MANAV-MISHRA-BYTES',
+    live: '#projects'
+  },
+  'cognifact': {
+    title: 'CogniFact AI',
+    badge: 'NLP & Misinformation Detection',
+    summary: 'Machine learning web application designed to evaluate news claims and classify credibility using transformer-based NLP models.',
+    architecture: [
+      'Interface: Interactive Streamlit dashboard for real-time text inference',
+      'ML Pipeline: Hugging Face pretrained transformer classification models',
+      'Preprocessing: Automated tokenization and confidence score calibration'
+    ],
+    repo: 'https://github.com/MANAV-MISHRA-BYTES',
+    live: '#projects'
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('projectModal');
+  const closeBtn = document.getElementById('closeProjectModalBtn');
+
+  function openCaseStudy(key) {
+    const data = projectCaseStudies[key];
+    if (!data || !modal) return;
+
+    document.getElementById('modalProjectTitle').innerText = data.title;
+    document.getElementById('modalProjectBadge').innerText = data.badge;
+    document.getElementById('modalProjectSummary').innerText = data.summary;
+    document.getElementById('modalRepoLink').href = data.repo;
+    document.getElementById('modalLiveLink').href = data.live;
+
+    const archList = document.getElementById('modalArchList');
+    archList.innerHTML = data.architecture.map(item => `<li>${item}</li>`).join('');
+
+    modal.classList.remove('hidden');
+  }
+
+  // Delegate clicks from any button with data-project attribute
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-project]');
+    if (trigger) {
+      e.preventDefault();
+      openCaseStudy(trigger.getAttribute('data-project').toLowerCase());
+    }
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+    }
+  });
+
+  if (closeBtn && modal) {
+    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      modal.classList.add('hidden');
+    }
+  });
+});
