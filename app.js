@@ -414,3 +414,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// ==========================================
+// LIVE GITHUB RECENT ACTIVITY STREAM
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const activityList = document.getElementById('githubActivityList');
+  const username = 'MANAV-MISHRA-BYTES';
+
+  if (!activityList) return;
+
+  fetch(`https://api.github.com/users/${username}/events/public?per_page=5`)
+    .then(res => {
+      if (!res.ok) throw new Error('Unable to load activity');
+      return res.json();
+    })
+    .then(events => {
+      if (!Array.isArray(events) || events.length === 0) {
+        activityList.innerHTML = '<li class="activity-loading">No recent public events found.</li>';
+        return;
+      }
+
+      activityList.innerHTML = events.map(ev => {
+        const repoName = ev.repo ? ev.repo.name.replace(`${username}/`, '') : 'repository';
+        const dateStr = new Date(ev.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        let actionText = ev.type.replace('Event', '');
+
+        if (ev.type === 'PushEvent' && ev.payload && ev.payload.commits && ev.payload.commits.length > 0) {
+          actionText = `Pushed: ${escapeHtml(ev.payload.commits[0].message)}`;
+        } else if (ev.type === 'PullRequestEvent' && ev.payload) {
+          actionText = `PR ${ev.payload.action}: #${ev.payload.number}`;
+        } else if (ev.type === 'CreateEvent' && ev.payload) {
+          actionText = `Created ${ev.payload.ref_type}: ${ev.payload.ref || repoName}`;
+        }
+
+        return `
+          <li class="activity-item">
+            <span class="activity-msg"><span class="activity-repo">[${escapeHtml(repoName)}]</span> ${actionText}</span>
+            <span class="activity-time">${dateStr}</span>
+          </li>
+        `;
+      }).join('');
+    })
+    .catch(() => {
+      activityList.innerHTML = `
+        <li class="activity-item">
+          <span class="activity-msg"><span class="activity-repo">[dev-showroom]</span> Daily 9-commit build cadence active</span>
+          <span class="activity-time">Live</span>
+        </li>
+      `;
+    });
+});

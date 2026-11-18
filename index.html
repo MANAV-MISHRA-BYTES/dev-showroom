@@ -46,6 +46,17 @@
             <p>Live metrics fetched directly from GitHub's REST API.</p>
         </div>
 
+        <!-- Live Recent GitHub Activity Feed -->
+        <div class="activity-feed-card">
+            <div class="activity-header">
+                <h3>Recent <span class="highlight">Commit & PR Stream</span></h3>
+                <span class="live-indicator"><span class="pulse-dot"></span> Live Feed</span>
+            </div>
+            <ul id="githubActivityList" class="activity-list">
+                <li class="activity-loading">Fetching latest GitHub activity...</li>
+            </ul>
+        </div>
+        
         <div class="stats-grid">
             <div class="stat-card">
                 <span class="stat-number" id="publicRepos">--</span>
