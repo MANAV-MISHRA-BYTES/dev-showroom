@@ -465,3 +465,42 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
 });
+
+// ==========================================
+// SCROLL PROGRESS, BACK-TO-TOP & PRINT HANDLER
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const progressBar = document.getElementById('scrollProgressBar');
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  const printBtn = document.getElementById('printResumeBtn');
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolledPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+    if (progressBar) {
+      progressBar.style.width = `${scrolledPercent}%`;
+    }
+
+    if (backToTopBtn) {
+      if (scrollTop > 400) {
+        backToTopBtn.classList.remove('hidden');
+      } else {
+        backToTopBtn.classList.add('hidden');
+      }
+    }
+  }, { passive: true });
+
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+  }
+});

@@ -1080,3 +1080,67 @@ kbd {
   font-size: 0.78rem;
   flex-shrink: 0;
 }
+
+/* ==========================================
+   16. SCROLL PROGRESS, BACK-TO-TOP & PRINT CSS
+   ========================================== */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+  z-index: 10000;
+  transition: width 0.1s ease-out;
+}
+
+.back-to-top-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: var(--bg-card);
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 9990;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.back-to-top-btn:hover {
+  background-color: var(--accent-cyan);
+  color: var(--bg-main);
+  transform: translateY(-3px);
+}
+
+.back-to-top-btn.hidden {
+  display: none;
+}
+
+@media print {
+  nav,
+  #terminal,
+  .project-controls,
+  .contact-form,
+  .back-to-top-btn,
+  .scroll-progress-bar,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .showroom-section {
+    padding: 1rem 0 !important;
+    page-break-inside: avoid;
+  }
+}

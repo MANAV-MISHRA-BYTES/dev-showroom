@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div id="scrollProgressBar" class="scroll-progress-bar"></div>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="logo">&lt;DevShowroom /&gt;</div>
@@ -337,12 +338,12 @@
 
     <!-- Contact & Direct Connect Section -->
     <section id="contact" class="showroom-section">
+        <button id="printResumeBtn" class="btn-secondary" title="Save / Print Portfolio as PDF">📄 Export PDF / Print</button>
         <div class="section-header">
             <span class="sub-badge">Get In Touch</span>
             <h2>Let's <span class="highlight">Connect</span></h2>
             <p>Have an opportunity, project idea, or want to collaborate? Drop a message below.</p>
         </div>
-
         <div class="contact-wrapper">
             <div class="contact-card">
                 <div class="quick-copy-box">
@@ -425,5 +426,6 @@
     <button id="backToTop" class="back-to-top" title="Go to top">↑</button>
     
     <script src="app.js"></script>
+    <button id="backToTopBtn" class="back-to-top-btn hidden" title="Back to Top">↑</button>
 </body>
 </html>
