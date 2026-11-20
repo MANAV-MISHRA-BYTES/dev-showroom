@@ -504,3 +504,79 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// ==========================================
+// GITHUB REPOSITORY LANGUAGE AGGREGATOR
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const barEl = document.getElementById('langProgressBar');
+  const legendEl = document.getElementById('langLegend');
+  const countEl = document.getElementById('repoScannedCount');
+  const username = 'MANAV-MISHRA-BYTES';
+
+  if (!barEl || !legendEl) return;
+
+  const langColors = {
+    Python: '#3572A5',
+    JavaScript: '#f1e05a',
+    HTML: '#e34c26',
+    CSS: '#563d7c',
+    Vue: '#41b883',
+    'C++': '#f34b7d',
+    Java: '#b07219',
+    Jupyter: '#DA5B0B'
+  };
+
+  fetch(`https://api.github.com/users/${username}/repos?per_page=100`)
+    .then(res => {
+      if (!res.ok) throw new Error('Repo fetch failed');
+      return res.json();
+    })
+    .then(repos => {
+      const counts = {};
+      let totalTagged = 0;
+
+      repos.forEach(repo => {
+        if (!repo.fork && repo.language) {
+          counts[repo.language] = (counts[repo.language] || 0) + 1;
+          totalTagged++;
+        }
+      });
+
+      if (countEl) countEl.innerText = `${totalTagged} active repos analyzed`;
+
+      const sorted = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6);
+
+      barEl.innerHTML = sorted.map(([lang, count]) => {
+        const pct = ((count / totalTagged) * 100).toFixed(1);
+        const color = langColors[lang] || '#06b6d4';
+        return `<div class="lang-segment" style="width: ${pct}%; background-color: ${color};" title="${lang}: ${pct}%"></div>`;
+      }).join('');
+
+      legendEl.innerHTML = sorted.map(([lang, count]) => {
+        const pct = ((count / totalTagged) * 100).toFixed(1);
+        const color = langColors[lang] || '#06b6d4';
+        return `
+          <span class="lang-legend-item">
+            <span class="lang-dot" style="background-color: ${color};"></span>
+            ${escapeHtml(lang)} <strong>${pct}%</strong>
+          </span>
+        `;
+      }).join('');
+    })
+    .catch(() => {
+      if (countEl) countEl.innerText = 'Cached stack profile';
+      barEl.innerHTML = `
+        <div class="lang-segment" style="width: 48%; background-color: #3572A5;"></div>
+        <div class="lang-segment" style="width: 32%; background-color: #f1e05a;"></div>
+        <div class="lang-segment" style="width: 20%; background-color: #e34c26;"></div>
+      `;
+      legendEl.innerHTML = `
+        <span class="lang-legend-item"><span class="lang-dot" style="background-color:#3572A5;"></span>Python <strong>48%</strong></span>
+        <span class="lang-legend-item"><span class="lang-dot" style="background-color:#f1e05a;"></span>JavaScript <strong>32%</strong></span>
+        <span class="lang-legend-item"><span class="lang-dot" style="background-color:#e34c26;"></span>HTML/CSS <strong>20%</strong></span>
+      `;
+    });
+});
