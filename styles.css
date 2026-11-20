@@ -1144,3 +1144,70 @@ kbd {
     page-break-inside: avoid;
   }
 }
+
+/* ==========================================
+   17. GITHUB LANGUAGE DISTRIBUTION WIDGET
+   ========================================== */
+.lang-breakdown-card {
+  max-width: 900px;
+  margin: 0 auto 1.5rem auto;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.lang-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lang-header h3 {
+  font-size: 1.05rem;
+  color: var(--text-main);
+}
+
+.lang-meta {
+  font-size: 0.8rem;
+  font-family: monospace;
+  color: var(--text-muted);
+}
+
+.lang-multi-bar {
+  display: flex;
+  height: 12px;
+  width: 100%;
+  background-color: var(--bg-secondary);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  gap: 2px;
+}
+
+.lang-segment {
+  height: 100%;
+  transition: width 0.8s ease;
+}
+
+.lang-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.lang-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--text-main);
+}
+
+.lang-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
