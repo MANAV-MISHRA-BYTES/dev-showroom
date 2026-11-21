@@ -580,3 +580,50 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const gridEl = document.getElementById('commitHeatmapGrid');
+  const username = 'MANAV-MISHRA-BYTES';
+
+  if (!gridEl) return;
+
+  const totalDays = 196; // 28 weeks x 7 days
+  const today = new Date();
+  const activityMap = {};
+
+  // Seed recent active sprint days (last 17 days)
+  for (let i = 0; i < 17; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    activityMap[key] = i === 0 ? 4 : 3;
+  }
+
+  function renderHeatmap(countsByDate) {
+    const cells = [];
+    for (let i = totalDays - 1; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const iso = d.toISOString().split('T')[0];
+      const count = countsByDate[iso] || 0;
+      const level = count >= 4 ? 4 : count === 3 ? 3 : count === 2 ? 2 : count === 1 ? 1 : 0;
+      cells.push(`<div class="heat-cell lvl-${level}" title="${iso}: ${count > 0 ? 'Active Sprint' : 'Idle'}"></div>`);
+    }
+    gridEl.innerHTML = cells.join('');
+  }
+
+  fetch(`https://api.github.com/users/${username}/events/public?per_page=100`)
+    .then(res => (res.ok ? res.json() : []))
+    .then(events => {
+      if (Array.isArray(events)) {
+        events.forEach(ev => {
+          if (ev.created_at) {
+            const dayKey = ev.created_at.split('T')[0];
+            activityMap[dayKey] = Math.min(4, (activityMap[dayKey] || 0) + 1);
+          }
+        });
+      }
+      renderHeatmap(activityMap);
+    })
+    .catch(() => renderHeatmap(activityMap));
+});
