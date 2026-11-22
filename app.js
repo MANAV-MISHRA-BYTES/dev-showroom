@@ -627,3 +627,69 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(() => renderHeatmap(activityMap));
 });
+
+// ==========================================
+// ENGINEERING LOGS READER CONTROLLER
+// ==========================================
+const engineeringNotes = {
+  'celery-redis': {
+    tag: 'Backend & Async',
+    title: 'Decoupling Heavy Analytics with Celery & Redis',
+    paragraphs: [
+      'When generating multi-period financial summaries and forecasting models in VyaaparDrishti AI, synchronous HTTP requests risked hitting gateway timeouts under larger datasets.',
+      'By introducing Redis as a low-latency message broker and offloading aggregation jobs to Celery background workers, the Flask API immediately returns a task ID while the client polls or streams completion status cleanly.'
+    ]
+  },
+  'zero-framework-spa': {
+    tag: 'Frontend Architecture',
+    title: 'Building a Fast Showroom Without Heavy Frameworks',
+    paragraphs: [
+      'Shipping a portfolio with zero runtime framework overhead keeps Time-to-Interactive near instant while sharpening core DOM, CSS Grid, and event-delegation fundamentals.',
+      'State persistence is handled via localStorage, theme switching relies purely on CSS custom property overrides, and live GitHub telemetry hydrates asynchronously with graceful fallbacks.'
+    ]
+  },
+  'gemini-structured': {
+    tag: 'AI Engineering',
+    title: 'Deterministic JSON Outputs from LLM Pipelines',
+    paragraphs: [
+      'Integrating generative models into user-facing workflows like Nexus requires strict guardrails so downstream UI components never break on malformed text.',
+      'Combining explicit JSON schema instructions, defensive parsing wrappers, and deterministic fallback objects ensures reliable rendering even under edge-case prompts.'
+    ]
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const readerModal = document.getElementById('noteReaderModal');
+  const closeReaderBtn = document.getElementById('closeNoteReaderBtn');
+
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.note-card[data-note]');
+    if (card && readerModal) {
+      const key = card.getAttribute('data-note');
+      const note = engineeringNotes[key];
+      if (!note) return;
+
+      document.getElementById('noteReaderTag').innerText = note.tag;
+      document.getElementById('noteReaderTitle').innerText = note.title;
+      document.getElementById('noteReaderContent').innerHTML = note.paragraphs
+        .map(p => `<p>${p}</p>`)
+        .join('');
+
+      readerModal.classList.remove('hidden');
+    }
+
+    if (e.target === readerModal) {
+      readerModal.classList.add('hidden');
+    }
+  });
+
+  if (closeReaderBtn && readerModal) {
+    closeReaderBtn.addEventListener('click', () => readerModal.classList.add('hidden'));
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && readerModal && !readerModal.classList.contains('hidden')) {
+      readerModal.classList.add('hidden');
+    }
+  });
+});
