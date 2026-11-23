@@ -23,6 +23,7 @@
         <ul class="nav-links">
             <button id="themeToggleBtn" class="btn-secondary" title="Toggle Theme (Alt+T)">🌓 Theme</button>
             <button id="shortcutsHelpBtn" class="btn-secondary" title="Keyboard Shortcuts (?)">⌨️ ?</button>
+            <button id="cmdPaletteBtn" class="btn-secondary" title="Quick Command Palette (Ctrl+K)">⌘K Search</button>
             <li><a href="#hero">Home</a></li>
             <li><a href="#certificates">Certificates</a></li>
             <li><a href="#projects">Projects</a></li>
@@ -483,6 +484,18 @@
                     <a id="modalLiveLink" href="#" target="_blank" class="btn-secondary">Live Demo</a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Spotlight Command Palette Modal -->
+    <div id="commandPaletteModal" class="modal-overlay hidden">
+        <div class="modal-card cmd-palette-card">
+            <div class="cmd-input-wrapper">
+                <span class="cmd-icon">❯</span>
+                <input type="text" id="cmdPaletteInput" placeholder="Type a command, section, or project..." autocomplete="off" spellcheck="false">
+                <kbd>ESC</kbd>
+            </div>
+            <ul id="cmdPaletteResults" class="cmd-results-list"></ul>
         </div>
     </div>
 
