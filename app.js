@@ -693,3 +693,123 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// ==========================================
+// SPOTLIGHT COMMAND PALETTE (CTRL+K / CMD+K)
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const paletteModal = document.getElementById('commandPaletteModal');
+  const paletteInput = document.getElementById('cmdPaletteInput');
+  const paletteResults = document.getElementById('cmdPaletteResults');
+  const openPaletteBtn = document.getElementById('cmdPaletteBtn');
+
+  if (!paletteModal || !paletteInput || !paletteResults) return;
+
+  const commandActions = [
+    { label: 'Jump to Projects Showroom', category: 'Navigation', action: () => scrollToSection('#projects') },
+    { label: 'Jump to GitHub Analytics & Heatmap', category: 'Navigation', action: () => scrollToSection('#analytics') },
+    { label: 'Jump to Skills Proficiency Matrix', category: 'Navigation', action: () => scrollToSection('#skills') },
+    { label: 'Jump to Career & Education Timeline', category: 'Navigation', action: () => scrollToSection('#experience') },
+    { label: 'Jump to Engineering Logs', category: 'Navigation', action: () => scrollToSection('#notes') },
+    { label: 'Jump to Interactive CLI Terminal', category: 'Navigation', action: () => scrollToSection('#terminal') },
+    { label: 'Jump to Contact & Direct Connect', category: 'Navigation', action: () => scrollToSection('#contact') },
+    { label: 'Toggle Dark / Light Theme', category: 'Action', action: () => document.getElementById('themeToggleBtn')?.click() },
+    { label: 'Export / Print Portfolio as PDF', category: 'Action', action: () => window.print() },
+    { label: 'Copy Contact Email to Clipboard', category: 'Action', action: () => document.getElementById('copyEmailBtn')?.click() },
+    { label: 'Open GitHub Profile (MANAV-MISHRA-BYTES)', category: 'External', action: () => window.open('https://github.com/MANAV-MISHRA-BYTES', '_blank') }
+  ];
+
+  let selectedIndex = 0;
+  let filteredCommands = [...commandActions];
+
+  function scrollToSection(selector) {
+    const el = document.querySelector(selector);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function openPalette() {
+    paletteModal.classList.remove('hidden');
+    paletteInput.value = '';
+    filteredCommands = [...commandActions];
+    selectedIndex = 0;
+    renderCommands();
+    paletteInput.focus();
+  }
+
+  function closePalette() {
+    paletteModal.classList.add('hidden');
+  }
+
+  function renderCommands() {
+    if (filteredCommands.length === 0) {
+      paletteResults.innerHTML = '<li class="cmd-result-item">No matching commands found</li>';
+      return;
+    }
+
+    paletteResults.innerHTML = filteredCommands.map((cmd, idx) => `
+      <li class="cmd-result-item ${idx === selectedIndex ? 'selected' : ''}" data-cmd-idx="${idx}">
+        <span>${escapeHtml(cmd.label)}</span>
+        <span class="cmd-result-category">${escapeHtml(cmd.category)}</span>
+      </li>
+    `).join('');
+  }
+
+  function executeCommand(index) {
+    const item = filteredCommands[index];
+    if (!item) return;
+    closePalette();
+    item.action();
+  }
+
+  if (openPaletteBtn) {
+    openPaletteBtn.addEventListener('click', openPalette);
+  }
+
+  paletteInput.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    filteredCommands = commandActions.filter(cmd =>
+      cmd.label.toLowerCase().includes(q) || cmd.category.toLowerCase().includes(q)
+    );
+    selectedIndex = 0;
+    renderCommands();
+  });
+
+  paletteInput.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIndex = (selectedIndex + 1) % Math.max(1, filteredCommands.length);
+      renderCommands();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIndex = (selectedIndex - 1 + filteredCommands.length) % Math.max(1, filteredCommands.length);
+      renderCommands();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      executeCommand(selectedIndex);
+    } else if (e.key === 'Escape') {
+      closePalette();
+    }
+  });
+
+  paletteResults.addEventListener('click', (e) => {
+    const row = e.target.closest('.cmd-result-item[data-cmd-idx]');
+    if (row) {
+      executeCommand(Number(row.getAttribute('data-cmd-idx')));
+    }
+  });
+
+  paletteModal.addEventListener('click', (e) => {
+    if (e.target === paletteModal) closePalette();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (paletteModal.classList.contains('hidden')) {
+        openPalette();
+      } else {
+        closePalette();
+      }
+    }
+  });
+});
