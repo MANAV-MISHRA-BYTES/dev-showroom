@@ -813,3 +813,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// ==========================================
+// SCROLL-SPY NAVIGATION & MOBILE MENU DRAWER
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const navLinksContainer = document.querySelector('nav .nav-links') || document.querySelector('nav ul');
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('nav a[href^="#"]');
+
+  if (mobileBtn && navLinksContainer) {
+    mobileBtn.addEventListener('click', () => {
+      navLinksContainer.classList.toggle('open');
+    });
+
+    navAnchors.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinksContainer.classList.remove('open');
+      });
+    });
+  }
+
+  // Highlight active section in navbar on scroll
+  window.addEventListener('scroll', () => {
+    const scrollPos = window.scrollY + 140;
+
+    sections.forEach(sec => {
+      const top = sec.offsetTop;
+      const height = sec.offsetHeight;
+      const id = sec.getAttribute('id');
+
+      if (scrollPos >= top && scrollPos < top + height) {
+        navAnchors.forEach(a => {
+          a.classList.remove('active-nav');
+          if (a.getAttribute('href') === `#${id}`) {
+            a.classList.add('active-nav');
+          }
+        });
+      }
+    });
+  }, { passive: true });
+});
