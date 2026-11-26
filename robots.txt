@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://manav-mishra-bytes.github.io/dev-showroom/sitemap.xml
