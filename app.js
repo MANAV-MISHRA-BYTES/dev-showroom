@@ -855,3 +855,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { passive: true });
 });
+
+// ==========================================
+// PORTFOLIO SHARE & CANONICAL LINK COPIER
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const shareBtn = document.getElementById('sharePortfolioBtn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', () => {
+      const shareUrl = document.querySelector('link[rel="canonical"]')?.href || window.location.href;
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: shareUrl
+        }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          if (typeof showToast === 'function') {
+            showToast('Portfolio URL copied to clipboard!');
+          }
+        });
+      }
+    });
+  }
+});
