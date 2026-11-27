@@ -879,3 +879,48 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// ==========================================
+// PWA SERVICE WORKER & INSTALL PROMPT HANDLER
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
+
+  let deferredPrompt = null;
+  const installBtn = document.getElementById('installPwaBtn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.classList.remove('hidden');
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted' && typeof showToast === 'function') {
+        showToast('Dev Showroom installed!');
+      }
+      deferredPrompt = null;
+      installBtn.classList.add('hidden');
+    });
+  }
+
+  window.addEventListener('offline', () => {
+    if (typeof showToast === 'function') {
+      showToast('Offline mode active — serving cached showroom');
+    }
+  });
+
+  window.addEventListener('online', () => {
+    if (typeof showToast === 'function') {
+      showToast('Back online — live telemetry synced');
+    }
+  });
+});
