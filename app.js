@@ -924,3 +924,67 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// ==========================================
+// LIVE REPOSITORY SPOTLIGHT (SORTED BY PUSH)
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const spotlightGrid = document.getElementById('repoSpotlightGrid');
+  const username = 'MANAV-MISHRA-BYTES';
+
+  if (!spotlightGrid) return;
+
+  fetch(`https://api.github.com/users/${username}/repos?type=sources&sort=pushed&direction=desc&per_page=6`)
+    .then(res => {
+      if (!res.ok) throw new Error('Unable to fetch repos');
+      return res.json();
+    })
+    .then(repos => {
+      const topRepos = repos.filter(r => !r.fork).slice(0, 4);
+
+      if (topRepos.length === 0) {
+        spotlightGrid.innerHTML = '<p class="activity-loading">No public source repositories found.</p>';
+        return;
+      }
+
+      spotlightGrid.innerHTML = topRepos.map(repo => {
+        const desc = repo.description
+          ? escapeHtml(repo.description)
+          : 'Active engineering repository maintained by Manav Mishra.';
+        const lang = repo.language ? escapeHtml(repo.language) : 'Code';
+        const pushedDate = new Date(repo.pushed_at).toLocaleDateString(undefined, {
+          month: 'short',
+          day: 'numeric'
+        });
+
+        return `
+          <a href="${repo.html_url}" target="_blank" rel="noopener" class="spotlight-repo-item">
+            <div class="spotlight-repo-top">
+              <span class="spotlight-repo-name">${escapeHtml(repo.name)}</span>
+              <span class="spotlight-repo-meta">★ ${repo.stargazers_count}</span>
+            </div>
+            <p class="spotlight-repo-desc">${desc}</p>
+            <div class="spotlight-repo-meta">
+              <span>● ${lang}</span>
+              <span>Updated ${pushedDate}</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+    })
+    .catch(() => {
+      spotlightGrid.innerHTML = `
+        <a href="https://github.com/MANAV-MISHRA-BYTES/dev-showroom" target="_blank" rel="noopener" class="spotlight-repo-item">
+          <div class="spotlight-repo-top">
+            <span class="spotlight-repo-name">dev-showroom</span>
+            <span class="spotlight-repo-meta">★ Live</span>
+          </div>
+          <p class="spotlight-repo-desc">Interactive Developer Showroom PWA with live GitHub REST telemetry and CLI terminal.</p>
+          <div class="spotlight-repo-meta">
+            <span>● JavaScript</span>
+            <span>Active</span>
+          </div>
+        </a>
+      `;
+    });
+});
